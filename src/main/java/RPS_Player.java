@@ -1,70 +1,83 @@
 import java.util.Random;
 
 public class RPS_Player {
+    private final static int ROCK = 0;
+    private final static int PAPER = 1;
+    private final static int SCISSORS = 2;
     private int numberOfGamesWon;
     private int numberOfGamesPlayed;
     private int choice;
+    private Random random;
     private String name;
+    private int numberOfDraws;
 
-    public RPS_Player(String name){
-        // TODO: replace this line with your code.
+    public RPS_Player(String name) {
+        this.name = name;
+        clear();
+        random = new Random();
     }
 
-    public String getName(){
-        // TODO: replace this line with your code.
+    public String getName() {
+        return name;
     }
 
-    /**
-     * Returns the number of games played since a clear() was issued.
-     * @return returns the number of games played.
-     */
-    public int getNumberOfGamesPlayed(){
-        // TODO: replace this line with your code.
+    public int getNumberOfGamesPlayed() {
+        return 2*numberOfGamesPlayed;
     }
 
-    /**
-     * Returns the number of games won since a clear() was issued.
-     * @return returns the number of games won.
-     */
-    public int getNumberOfGamesWon(){
-        // TODO: replace this line with your code.
+    public int getNumberOfGamesWon() {
+        return numberOfGamesWon;
     }
 
-    /**
-     * Returns the win percentage as number between 0 and 1.
-     * @return win percentage as a double.
-     */
-    public double getWinPercentage(){
-        // TODO: replace this line with your code.
+    public double getWinPercentage() {
+        if (numberOfGamesPlayed == 0) {
+            return 0.0;
+        } else {
+            return ((double) numberOfGamesWon / numberOfGamesPlayed) * 100.0;
+        }
+    }
+    public void clear() {
+        numberOfGamesWon = 0;
+        numberOfDraws = 0;
+        numberOfGamesPlayed = 0;
+        choice = 0;
     }
 
-    /**
-     * Starts a new game.
-     */
-    public void clear(){
-        // TODO: replace this line with your code.
+    public RPS_Player challenge(RPS_Player anotherPlayer) {
+        int choice1 = random.nextInt(3);
+        int choice2 = random.nextInt(3);
+
+        this.choice = choice1;
+        numberOfGamesPlayed++;
+
+        if (choice1 == choice2) { // results in a draw
+            numberOfDraws++;
+            return null;
+        } else if ((choice1 + 1) % 3 == choice2) { // player 1 wins (this)
+            numberOfGamesWon++;
+            return this;
+        } else { // player 2 wins
+            anotherPlayer.numberOfGamesWon++;
+            return anotherPlayer;
+        }
     }
 
-    /**
-     * This player challenges anotherPlayer whereby both players make a
-     * random choice of rock, paper, scissors.  A reference to the winning
-     * player is returned or null if there is a draw.
-     * @param anotherPlayer an RPS_Player that this player is challenging.
-     * @return Reference to the RPS_Player that won or a null if there is a draw
-     */
-    public RPS_Player challenge(RPS_Player anotherPlayer){
-        // TODO: replace this line with your code.
-    }
+    public RPS_Player keepAndChallenge(RPS_Player anotherPlayer) {
+        if (choice == -1) {
+            return null;
+        }
+        int choice2 = random.nextInt(3);
+        numberOfGamesPlayed++;
 
-    /**
-     * This player challenges anotherPlayer whereby this player uses the previous
-     * choice made and anotherPlayer makes a random choice of rock, paper, scissors.
-     * A reference to the winning player is returned or null if there is a draw.
-     * @param anotherPlayer an RPS_Player that this player is challenging.
-     * @return Reference to the RPS_Player that won or a null if there is a draw
-     */
-    public RPS_Player keepAndChallenge(RPS_Player anotherPlayer){
-        // TODO: replace this line with your code.
+        if (choice == choice2) {
+            numberOfDraws++;
+            return null;
+        } else if ((choice + 1) % 3 == choice2) {
+            numberOfGamesWon++;
+            return this;
+        } else {
+            anotherPlayer.numberOfGamesWon++;
+            return anotherPlayer;
+        }
     }
-
 }
